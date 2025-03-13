@@ -1,5 +1,5 @@
 import { createHeaderComponent } from "./components/header/header";
-import { createRestaurantListComponent } from "./components/restaurantList./createRestaurantList";
+import { createRestaurantListComponent } from "./components/restaurantList/createRestaurantList";
 import { RESTAURANT_LIST } from "./components/restaurantList/constant";
 import { createSelectComponent } from "./components/select/select";
 import {
@@ -25,8 +25,8 @@ console.log(
 // 자바스크립트 코드에서 이미지 리소스 로드 테스트
 // index.html 파일의 html 구조를 수정하셔도 됩니다.
 addEventListener("load", () => {
-  const categoryFilterValue = INIT_CATEGORY_FILTER_VALUE;
-  const sortingFilterValue = SORTING_FILTER_VALUE;
+  let categoryFilterValue = INIT_CATEGORY_FILTER_VALUE;
+  let sortingFilterValue = SORTING_FILTER_VALUE;
 
   const app = document.querySelector("main");
   app.prepend(createHeaderComponent());
