@@ -29,6 +29,7 @@ console.log(
 addEventListener("load", () => {
   let categoryFilterValue = INIT_CATEGORY_FILTER_VALUE;
   let sortingFilterValue = SORTING_FILTER_VALUE;
+  let restaurantListData = RESTAURANT_LIST;
   let isModalOpen = false;
   const app = document.querySelector("main");
   app.prepend(
@@ -61,40 +62,62 @@ addEventListener("load", () => {
   const restaurantList = document.querySelector(".restaurant-list");
 
   renderRestaurantList({
+    restaurantListData,
     restaurantList,
     sortingFilterValue,
     categoryFilterValue,
   });
 
+  changeFilterListener({
+    restaurantListData,
+    restaurantList,
+    sortingFilterValue,
+    categoryFilterValue,
+  });
+
+  // app.appendChild(renderModal());
+});
+
+function changeFilterListener({
+  restaurantListData,
+  restaurantList,
+  sortingFilterValue,
+  categoryFilterValue,
+}) {
   document.addEventListener("change", (e) => {
     if (e.target.id === "category-filter") {
       categoryFilterValue = e.target.value;
       renderRestaurantList({
+        restaurantListData,
         restaurantList,
         sortingFilterValue,
         categoryFilterValue,
       });
     }
+
     if (e.target.id === "sorting-filter") {
       sortingFilterValue = e.target.value;
       renderRestaurantList({
+        restaurantListData,
         restaurantList,
         sortingFilterValue,
         categoryFilterValue,
       });
     }
   });
-
-  app.appendChild(renderModal());
-});
+}
 
 function renderRestaurantList({
+  restaurantListData,
   restaurantList,
   sortingFilterValue,
   categoryFilterValue,
 }) {
   restaurantList.innerHTML = "";
-  const restaurants = filteredRestaurants(categoryFilterValue);
+  const restaurants = filteredRestaurants(
+    categoryFilterValue,
+    restaurantListData
+  );
 
   sortedRestaurants(restaurants, sortingFilterValue);
 
@@ -103,8 +126,8 @@ function renderRestaurantList({
   });
 }
 
-function filteredRestaurants(categoryFilterValue) {
-  return RESTAURANT_LIST.filter(
+function filteredRestaurants(categoryFilterValue, restaurantListData) {
+  return restaurantListData.filter(
     (item) =>
       categoryFilterValue === "전체" || categoryFilterValue === item.category
   );
@@ -128,7 +151,6 @@ function sortedRestaurants(restaurants, sortingFilterValue) {
 
 function renderModal() {
   const modal = createModal();
-  console.log(modal, "modal");
   const modalContainer = modal.querySelector(".modal-container");
   modalContainer.appendChild(createNewRestaurantForm({}));
   return modal;
