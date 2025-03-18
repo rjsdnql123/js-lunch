@@ -7,11 +7,15 @@ function createTitle({ titleContent }) {
   return title;
 }
 
-function createButton({ ariaLabel, imgAlt }) {
+function createButton({ ariaLabel, imgAlt, headerButtonClick }) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "gnb__button";
   button.setAttribute("aria-label", ariaLabel);
+
+  button.addEventListener("click", () => {
+    headerButtonClick();
+  });
 
   const img = document.createElement("img");
   img.src = "./public/assets/add-button.png";
@@ -21,7 +25,7 @@ function createButton({ ariaLabel, imgAlt }) {
   return button;
 }
 
-export function createHeaderComponent() {
+export function createHeaderComponent({ headerButtonClick }) {
   const header = document.createElement("header");
   header.className = "gnb";
 
@@ -30,6 +34,7 @@ export function createHeaderComponent() {
     createButton({
       ariaLabel: HEADER_CONSTANT.BUTTON_ARIA_LABEL,
       imgAlt: HEADER_CONSTANT.BUTTON_IMG_ALT,
+      headerButtonClick,
     })
   );
 

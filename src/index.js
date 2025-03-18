@@ -2,6 +2,8 @@ import { createHeaderComponent } from "./components/header/header";
 import { createRestaurantListComponent } from "./components/restaurantList/createRestaurantList";
 import { RESTAURANT_LIST } from "./components/restaurantList/constant";
 import { createSelectComponent } from "./components/select/select";
+import { createModal } from "./components/modal/createModal";
+import { createNewRestaurantForm } from "./components/modal/newRestaurant";
 import {
   SORTING_FILTER_VALUE,
   INIT_CATEGORY_FILTER_VALUE,
@@ -27,9 +29,15 @@ console.log(
 addEventListener("load", () => {
   let categoryFilterValue = INIT_CATEGORY_FILTER_VALUE;
   let sortingFilterValue = SORTING_FILTER_VALUE;
-
+  let isModalOpen = false;
   const app = document.querySelector("main");
-  app.prepend(createHeaderComponent());
+  app.prepend(
+    createHeaderComponent({
+      headerButtonClick: () => {
+        isModalOpen = !isModalOpen;
+      },
+    })
+  );
 
   const section = document.querySelector(".restaurant-filter-container");
   section.appendChild(
@@ -76,6 +84,8 @@ addEventListener("load", () => {
       });
     }
   });
+
+  app.appendChild(renderModal());
 });
 
 function renderRestaurantList({
@@ -114,4 +124,12 @@ function sortedRestaurants(restaurants, sortingFilterValue) {
     }
     return 0;
   });
+}
+
+function renderModal() {
+  const modal = createModal();
+  console.log(modal, "modal");
+  const modalContainer = modal.querySelector(".modal-container");
+  modalContainer.appendChild(createNewRestaurantForm({}));
+  return modal;
 }
