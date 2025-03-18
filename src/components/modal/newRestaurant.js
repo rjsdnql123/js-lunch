@@ -11,6 +11,16 @@ export function createNewRestaurantForm({}) {
   newRestaurantForm.appendChild(
     createNewRestaurantSortWrapperAndLabel({ label: "거리" })
   );
+
+  newRestaurantForm.appendChild(
+    createNewRestaurantDescriptionWrapperAndLabel({ label: "설명" })
+  );
+
+  newRestaurantForm.appendChild(
+    createNewRestaurantLinkWrapperAndLabel({ label: "링크" })
+  );
+
+  newRestaurantForm.appendChild(createBottomButtonWrapperAnd());
   return newRestaurantForm;
 }
 
@@ -52,6 +62,78 @@ const createNewRestaurantSortWrapperAndLabel = ({ label }) => {
 
   return createSortWrapper;
 };
+
+function createNewRestaurantDescriptionWrapperAndLabel({ label }) {
+  const createDescriptionWrapper = document.createElement("div");
+  createDescriptionWrapper.classList.add("form-item");
+  const newRestaurantDescriptionLabel = document.createElement("label");
+  newRestaurantDescriptionLabel.htmlFor = "description text-caption";
+  newRestaurantDescriptionLabel.textContent = label;
+
+  createDescriptionWrapper.appendChild(newRestaurantDescriptionLabel);
+  createDescriptionWrapper.appendChild(createNewRestaurantDescriptionInput());
+
+  return createDescriptionWrapper;
+}
+
+function createNewRestaurantLinkWrapperAndLabel({ label }) {
+  const createLinkWrapper = document.createElement("div");
+  createLinkWrapper.classList.add("form-item");
+  const newRestaurantLinkLabel = document.createElement("label");
+  newRestaurantLinkLabel.htmlFor = "link text-caption";
+  newRestaurantLinkLabel.textContent = label;
+
+  const linkInput = document.createElement("input");
+  linkInput.type = "text";
+  linkInput.id = "link";
+  linkInput.name = "link";
+
+  const linkDesc = document.createElement("span");
+  linkDesc.classList.add("help-text", "text-caption");
+
+  createLinkWrapper.appendChild(newRestaurantLinkLabel);
+  createLinkWrapper.appendChild(linkInput);
+  createLinkWrapper.appendChild(linkDesc);
+
+  return createLinkWrapper;
+}
+
+function createBottomButtonWrapperAnd() {
+  const createBottomButtonWrapper = document.createElement("div");
+  createBottomButtonWrapper.classList.add("button-container");
+
+  const cancelButton = createButton({
+    text: "취소",
+    className: "button button--secondary text-caption",
+  });
+
+  const addButton = createButton({
+    text: "추가",
+    className: "button button--primary text-caption",
+  });
+
+  createBottomButtonWrapper.appendChild(cancelButton);
+  createBottomButtonWrapper.appendChild(addButton);
+
+  return createBottomButtonWrapper;
+}
+
+function createButton({ text, className }) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = text;
+  button.className += className;
+  return button;
+}
+
+function createNewRestaurantDescriptionInput() {
+  const input = document.createElement("textarea");
+  input.id = "description";
+  input.name = "description";
+  input.rows = 5;
+  input.cols = 30;
+  return input;
+}
 
 const createNewRestaurantNameInput = () => {
   const input = document.createElement("input");
