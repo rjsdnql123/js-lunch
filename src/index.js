@@ -31,6 +31,7 @@ addEventListener("load", () => {
   let sortingFilterValue = SORTING_FILTER_VALUE;
   let restaurantListData = RESTAURANT_LIST;
   let isModalOpen = false;
+
   const app = document.querySelector("main");
   app.prepend(
     createHeaderComponent({
@@ -75,7 +76,7 @@ addEventListener("load", () => {
     categoryFilterValue,
   });
 
-  // app.appendChild(renderModal());
+  app.appendChild(renderModal({ restaurantListData }));
 });
 
 function changeFilterListener({
@@ -149,9 +150,24 @@ function sortedRestaurants(restaurants, sortingFilterValue) {
   });
 }
 
-function renderModal() {
+function addRestaurant({ restaurantListData }) {
+  return ({ category, name, distance, desc }) => {
+    restaurantListData.push({
+      category,
+      name,
+      distance,
+      desc,
+    });
+  };
+}
+
+function renderModal({ restaurantListData }) {
   const modal = createModal();
   const modalContainer = modal.querySelector(".modal-container");
-  modalContainer.appendChild(createNewRestaurantForm({}));
+  modalContainer.appendChild(
+    createNewRestaurantForm({
+      addRestaurant: addRestaurant({ restaurantListData }),
+    })
+  );
   return modal;
 }

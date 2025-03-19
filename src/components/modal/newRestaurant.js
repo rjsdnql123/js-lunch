@@ -1,6 +1,7 @@
 import { RESTAURANT_CATEGORY_LIST, SORT_OPTION_LIST } from "../select/constant";
 import { createSelectComponent } from "../select/select";
-export function createNewRestaurantForm({}) {
+
+export function createNewRestaurantForm({ addRestaurant, onCancel }) {
   const newRestaurantForm = document.createElement("form");
   newRestaurantForm.appendChild(
     createNewRestaurantCategoryWrapperAndLabel({ label: "카테고리" })
@@ -20,7 +21,28 @@ export function createNewRestaurantForm({}) {
     createNewRestaurantLinkWrapperAndLabel({ label: "링크" })
   );
 
-  newRestaurantForm.appendChild(createBottomButtonWrapperAnd());
+  newRestaurantForm.appendChild(
+    createBottomButtonWrapperAnd({
+      cancel: () => {
+        if (typeof onCancel === "function") {
+          onCancel();
+        }
+      },
+      add: (e) => {
+        e.preventDefault();
+        const newRestaurant = {
+          category: e.target.form.elements.category.value,
+          name: e.target.form.elements.name.value,
+          distance: e.target.form.elements.sorting.value,
+          description: e.target.form.elements.description.value,
+          link: e.target.form.elements.link.value,
+        };
+        console.log(newRestaurant, "newRestaurant");
+        addRestaurant(newRestaurant);
+      },
+    })
+  );
+
   return newRestaurantForm;
 }
 
@@ -98,7 +120,7 @@ function createNewRestaurantLinkWrapperAndLabel({ label }) {
   return createLinkWrapper;
 }
 
-function createBottomButtonWrapperAnd() {
+function createBottomButtonWrapperAnd({ cancel, add }) {
   const createBottomButtonWrapper = document.createElement("div");
   createBottomButtonWrapper.classList.add("button-container");
 
@@ -111,6 +133,9 @@ function createBottomButtonWrapperAnd() {
     text: "추가",
     className: "button button--primary text-caption",
   });
+
+  addButton.addEventListener("click", add);
+  cancelButton.addEventListener("click", cancel);
 
   createBottomButtonWrapper.appendChild(cancelButton);
   createBottomButtonWrapper.appendChild(addButton);
