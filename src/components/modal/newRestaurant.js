@@ -6,7 +6,6 @@ import {
 import { createSelectComponent } from "../select/select";
 
 export function createNewRestaurantForm({ addRestaurant, onCancel }) {
-  console.log(addRestaurant, "addRestaurant");
   const newRestaurantForm = document.createElement("form");
   newRestaurantForm.appendChild(
     createNewRestaurantCategoryWrapperAndLabel({ label: "카테고리" })
@@ -47,7 +46,7 @@ export function createNewRestaurantForm({ addRestaurant, onCancel }) {
           description: e.target.form.elements.description.value,
           link: e.target.form.elements.link.value,
         };
-        console.log(newRestaurant, "newRestaurant");
+
         addRestaurant(newRestaurant);
         onCancel();
       },
@@ -191,17 +190,17 @@ const createNewRestaurantCategorySelect = () => {
     className: "form-select",
     attName: "category",
     id: "category",
-    options: ["선택해 주세요", ...Object.keys(RESTAURANT_CATEGORY_LIST)],
+    options: { "선택해 주세요": "선택해 주세요", ...RESTAURANT_CATEGORY_LIST },
   });
   return select;
 };
 
 const createNewRestaurantSortSelect = () => {
   const select = createSelectComponent({
-    className: "restaurant-filter",
+    className: "",
     attName: "sorting",
-    id: "sorting-filter",
-    options: ["선택해 주세요", ...RESTAURANT_DISTANCE],
+    id: "distance",
+    options: { "선택해 주세요": "선택해 주세요", ...RESTAURANT_DISTANCE },
   });
   return select;
 };
