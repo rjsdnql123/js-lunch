@@ -2,7 +2,7 @@ import { createHeaderComponent } from "./components/header/header";
 import { createRestaurantListComponent } from "./components/restaurantList/createRestaurantList";
 import { RESTAURANT_LIST } from "./components/restaurantList/constant";
 import { createSelectComponent } from "./components/select/select";
-import { createModal } from "./components/modal/createModal";
+import { createModal, closeModal } from "./components/modal/createModal";
 import { createNewRestaurantForm } from "./components/modal/newRestaurant";
 import {
   SORTING_FILTER_VALUE,
@@ -12,6 +12,7 @@ import {
   RESTAURANT_CATEGORY_LIST,
   SORT_OPTION_LIST,
 } from "./components/select/constant";
+
 console.log("npm run dev 명령어를 통해 점심 뭐 먹지 미션을 시작하세요");
 console.log(
   "%c ___       ___  ___  ________   ________  ___  ___     \n" +
@@ -26,21 +27,24 @@ console.log(
 
 // 자바스크립트 코드에서 이미지 리소스 로드 테스트
 // index.html 파일의 html 구조를 수정하셔도 됩니다.
+
 addEventListener("load", () => {
   let categoryFilterValue = INIT_CATEGORY_FILTER_VALUE;
   let sortingFilterValue = SORTING_FILTER_VALUE;
   let restaurantListData = RESTAURANT_LIST;
-  let isModalOpen = false;
 
+  // header render 영역
   const app = document.querySelector("main");
   app.prepend(
     createHeaderComponent({
       headerButtonClick: () => {
-        isModalOpen = !isModalOpen;
+        const modal = document.querySelector(".modal");
+        modal.classList.toggle("modal--open");
       },
     })
   );
 
+  // filter 렌더 영역
   const section = document.querySelector(".restaurant-filter-container");
   section.appendChild(
     createSelectComponent({
@@ -60,6 +64,7 @@ addEventListener("load", () => {
     })
   );
 
+  // list 렌더 영역
   const restaurantList = document.querySelector(".restaurant-list");
 
   renderRestaurantList({
@@ -76,7 +81,8 @@ addEventListener("load", () => {
     categoryFilterValue,
   });
 
-  app.appendChild(renderModal({ restaurantListData }));
+  // modal 렌더 영역
+  app.appendChild(renderModal({ restaurantListData, restaurantList }));
 });
 
 function changeFilterListener({
@@ -150,23 +156,39 @@ function sortedRestaurants(restaurants, sortingFilterValue) {
   });
 }
 
-function addRestaurant({ restaurantListData }) {
-  return ({ category, name, distance, desc }) => {
+function addRestaurant({ restaurantListData, restaurantList }) {
+  return ({ category, name, distance, description, link }) => {
     restaurantListData.push({
       category,
       name,
       distance,
-      desc,
+      description,
+      link,
+    });
+    const categoryFilterValue = document.getElementById("category-filter")
+      ? document.getElementById("category-filter").value
+      : "전체";
+    const sortingFilterValue = document.getElementById("sorting-filter")
+      ? document.getElementById("sorting-filter").value
+      : SORTING_FILTER_VALUE;
+    renderRestaurantList({
+      restaurantListData,
+      restaurantList,
+      sortingFilterValue,
+      categoryFilterValue,
     });
   };
 }
 
-function renderModal({ restaurantListData }) {
+function renderModal({ restaurantListData, restaurantList }) {
   const modal = createModal();
   const modalContainer = modal.querySelector(".modal-container");
   modalContainer.appendChild(
     createNewRestaurantForm({
-      addRestaurant: addRestaurant({ restaurantListData }),
+      addRestaurant: addRestaurant({ restaurantListData, restaurantList }),
+      onCancel: () => {
+        closeModal();
+      },
     })
   );
   return modal;

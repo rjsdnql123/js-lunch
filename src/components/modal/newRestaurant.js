@@ -1,7 +1,12 @@
-import { RESTAURANT_CATEGORY_LIST, SORT_OPTION_LIST } from "../select/constant";
+import {
+  RESTAURANT_CATEGORY_LIST,
+  SORT_OPTION_LIST,
+  RESTAURANT_DISTANCE,
+} from "../select/constant";
 import { createSelectComponent } from "../select/select";
 
 export function createNewRestaurantForm({ addRestaurant, onCancel }) {
+  console.log(addRestaurant, "addRestaurant");
   const newRestaurantForm = document.createElement("form");
   newRestaurantForm.appendChild(
     createNewRestaurantCategoryWrapperAndLabel({ label: "카테고리" })
@@ -10,15 +15,21 @@ export function createNewRestaurantForm({ addRestaurant, onCancel }) {
     createNewRestaurantNameWrapperAndLabel({ label: "이름" })
   );
   newRestaurantForm.appendChild(
-    createNewRestaurantSortWrapperAndLabel({ label: "거리" })
+    createNewRestaurantSortWrapperAndLabel({ label: "거리 (도보 이동시간)" })
   );
 
   newRestaurantForm.appendChild(
-    createNewRestaurantDescriptionWrapperAndLabel({ label: "설명" })
+    createNewRestaurantDescriptionWrapperAndLabel({
+      label: "설명",
+      description: "메뉴 등 추가 정보를 입력해 주세요.",
+    })
   );
 
   newRestaurantForm.appendChild(
-    createNewRestaurantLinkWrapperAndLabel({ label: "링크" })
+    createNewRestaurantLinkWrapperAndLabel({
+      label: "링크",
+      description: "매장 정보를 확인할 수 있는 링크를 입력해 주세요.",
+    })
   );
 
   newRestaurantForm.appendChild(
@@ -29,7 +40,6 @@ export function createNewRestaurantForm({ addRestaurant, onCancel }) {
         }
       },
       add: (e) => {
-        e.preventDefault();
         const newRestaurant = {
           category: e.target.form.elements.category.value,
           name: e.target.form.elements.name.value,
@@ -39,6 +49,7 @@ export function createNewRestaurantForm({ addRestaurant, onCancel }) {
         };
         console.log(newRestaurant, "newRestaurant");
         addRestaurant(newRestaurant);
+        onCancel();
       },
     })
   );
@@ -85,20 +96,25 @@ const createNewRestaurantSortWrapperAndLabel = ({ label }) => {
   return createSortWrapper;
 };
 
-function createNewRestaurantDescriptionWrapperAndLabel({ label }) {
+function createNewRestaurantDescriptionWrapperAndLabel({ label, description }) {
   const createDescriptionWrapper = document.createElement("div");
   createDescriptionWrapper.classList.add("form-item");
   const newRestaurantDescriptionLabel = document.createElement("label");
   newRestaurantDescriptionLabel.htmlFor = "description text-caption";
   newRestaurantDescriptionLabel.textContent = label;
 
+  const descriptionSpan = document.createElement("span");
+  descriptionSpan.classList.add("help-text", "text-caption");
+  descriptionSpan.textContent = description;
+
   createDescriptionWrapper.appendChild(newRestaurantDescriptionLabel);
   createDescriptionWrapper.appendChild(createNewRestaurantDescriptionInput());
+  createDescriptionWrapper.appendChild(descriptionSpan);
 
   return createDescriptionWrapper;
 }
 
-function createNewRestaurantLinkWrapperAndLabel({ label }) {
+function createNewRestaurantLinkWrapperAndLabel({ label, description }) {
   const createLinkWrapper = document.createElement("div");
   createLinkWrapper.classList.add("form-item");
   const newRestaurantLinkLabel = document.createElement("label");
@@ -112,6 +128,8 @@ function createNewRestaurantLinkWrapperAndLabel({ label }) {
 
   const linkDesc = document.createElement("span");
   linkDesc.classList.add("help-text", "text-caption");
+
+  linkDesc.textContent = description;
 
   createLinkWrapper.appendChild(newRestaurantLinkLabel);
   createLinkWrapper.appendChild(linkInput);
@@ -173,7 +191,7 @@ const createNewRestaurantCategorySelect = () => {
     className: "form-select",
     attName: "category",
     id: "category",
-    options: RESTAURANT_CATEGORY_LIST,
+    options: ["선택해 주세요", ...Object.keys(RESTAURANT_CATEGORY_LIST)],
   });
   return select;
 };
@@ -183,7 +201,7 @@ const createNewRestaurantSortSelect = () => {
     className: "restaurant-filter",
     attName: "sorting",
     id: "sorting-filter",
-    options: SORT_OPTION_LIST,
+    options: ["선택해 주세요", ...RESTAURANT_DISTANCE],
   });
   return select;
 };

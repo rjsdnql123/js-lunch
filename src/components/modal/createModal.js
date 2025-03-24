@@ -1,4 +1,5 @@
 import { newRestaurant } from "./constant";
+
 export function createModal() {
   const modal = document.querySelector(".modal");
   const modalBackground = document.createElement("div");
@@ -10,6 +11,11 @@ export function createModal() {
   modal.appendChild(modalBackground);
   modal.appendChild(modalContainer);
   return modal;
+}
+
+export function closeModal() {
+  const modal = document.querySelector(".modal");
+  modal.classList.toggle("modal--open");
 }
 
 function createModalTitle({ title }) {

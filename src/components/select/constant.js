@@ -11,3 +11,12 @@ export const SORT_OPTION_LIST = {
   name: "이름순",
   distance: "거리순",
 };
+
+export const RESTAURANT_DISTANCE = [
+  "5분 내",
+  "10분 내",
+  "15분 내",
+  "20분 내",
+  "25분 내",
+  "30분 내",
+];
